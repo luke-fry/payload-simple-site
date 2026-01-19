@@ -69,7 +69,11 @@ export default buildConfig({
     ...plugins,
     s3Storage({
       collections: {
-        media: true,
+        media: {
+          generateFileURL: ({ filename, prefix = '' }) => {
+            return `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${prefix ? `${prefix}/` : ''}${filename}`
+          },
+        },
       },
       bucket: process.env.S3_BUCKET || '',
       config: {
