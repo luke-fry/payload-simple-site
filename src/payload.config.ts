@@ -68,18 +68,10 @@ export default buildConfig({
   plugins: [
     ...plugins,
     s3Storage({
+      enabled: true,
       collections: {
         media: {
           disableLocalStorage: true,
-          generateFileURL: (args) => {
-            if (!args?.filename) {
-              return ''
-            }
-            const prefix = args.prefix || ''
-            const bucket = process.env.S3_BUCKET
-            const region = process.env.S3_REGION
-            return `https://${bucket}.s3.${region}.amazonaws.com/${prefix ? `${prefix}/` : ''}${args.filename}`
-          },
         },
       },
       bucket: process.env.S3_BUCKET || '',
