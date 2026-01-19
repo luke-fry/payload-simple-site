@@ -18,6 +18,16 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // S3 bucket for media uploads
+      {
+        protocol: 'https',
+        hostname: `${process.env.S3_BUCKET || 'payload-cms-media-lukefry'}.s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com`,
+      },
+      // Alternative S3 URL format
+      {
+        protocol: 'https',
+        hostname: `s3.${process.env.S3_REGION || 'us-east-1'}.amazonaws.com`,
+      },
     ],
   },
   webpack: (webpackConfig) => {
