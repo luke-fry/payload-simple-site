@@ -20,6 +20,25 @@ import { getServerSideURL } from './utilities/getURL'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const s3Bucket = process.env.S3_BUCKET || ''
+const s3Region =
+  process.env.S3_REGION || process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || ''
+const s3AccessKeyId = process.env.S3_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID || ''
+const s3SecretAccessKey =
+  process.env.S3_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY || ''
+
+if (process.env.NODE_ENV === 'production') {
+  // Helps surface misconfigured Vercel env vars quickly.
+  if (!s3Bucket || !s3Region || !s3AccessKeyId || !s3SecretAccessKey) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[payload] S3 is enabled but one or more S3 env vars are missing. Uploads may 500 on Vercel. ' +
+        'Expected S3_BUCKET, S3_REGION (or AWS_REGION), S3_ACCESS_KEY_ID (or AWS_ACCESS_KEY_ID), ' +
+        'S3_SECRET_ACCESS_KEY (or AWS_SECRET_ACCESS_KEY).',
+    )
+  }
+}
+
 export default buildConfig({
   admin: {
     components: {
@@ -69,18 +88,21 @@ export default buildConfig({
     ...plugins,
     s3Storage({
       enabled: true,
+      // Vercel Serverless Functions have a small request body limit for uploads.
+      // Client uploads bypass that limit by uploading directly to S3 using presigned URLs.
+      clientUploads: true,
       collections: {
         media: {
           disableLocalStorage: true,
         },
       },
-      bucket: process.env.S3_BUCKET || '',
+      bucket: s3Bucket,
       config: {
         credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+          accessKeyId: s3AccessKeyId,
+          secretAccessKey: s3SecretAccessKey,
         },
-        region: process.env.S3_REGION || '',
+        region: s3Region,
         forcePathStyle: false,
       },
     }),
