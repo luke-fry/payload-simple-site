@@ -70,8 +70,15 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: {
-          generateFileURL: ({ filename, prefix = '' }) => {
-            return `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION}.amazonaws.com/${prefix ? `${prefix}/` : ''}${filename}`
+          disableLocalStorage: true,
+          generateFileURL: (args) => {
+            if (!args?.filename) {
+              return ''
+            }
+            const prefix = args.prefix || ''
+            const bucket = process.env.S3_BUCKET
+            const region = process.env.S3_REGION
+            return `https://${bucket}.s3.${region}.amazonaws.com/${prefix ? `${prefix}/` : ''}${args.filename}`
           },
         },
       },
