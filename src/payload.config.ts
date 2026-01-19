@@ -81,6 +81,7 @@ export default buildConfig({
           secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
         },
         region: process.env.S3_REGION || '',
+        forcePathStyle: false,
       },
     }),
   ],
