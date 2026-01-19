@@ -3,16 +3,13 @@ import Link from 'next/link'
 import React from 'react'
 
 import type { Footer } from '@/payload-types'
-import type { SiteSettings } from '@/payload-types'
 
-// import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
 import { SocialLinks } from '@/components/SocialLinks/SocialLinks'
 
 export async function Footer() {
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
-  const siteSettingsData: SiteSettings = await getCachedGlobal('site-settings', 1)()
+  const footerData = (await getCachedGlobal('footer', 1)()) as Footer
 
   const footerPrimaryItems = footerData?.footerPrimaryItems || []
   const footerServicesItems = footerData?.footerServicesItems || []
@@ -27,7 +24,7 @@ export async function Footer() {
         <div className="grid grid-cols-3 gap-x-16">
           <div className="flex flex-col gap-y-[1rem]">
             <Link className="flex items-center" href="/">
-              <Logo src={footerLogo?.url} className="h-12 w-auto" />
+              <Logo src={typeof footerLogo === 'object' ? footerLogo?.url || undefined : undefined} className="h-12 w-auto" />
             </Link>
 
             {footerBlurb && <div className="text-sm" dangerouslySetInnerHTML={{ __html: footerBlurb }}></div>}

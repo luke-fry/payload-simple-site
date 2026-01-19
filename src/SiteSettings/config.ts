@@ -3,7 +3,7 @@ import type { GlobalConfig } from 'payload'
 import { link } from '@/fields/link'
 
 export const SiteSettings: GlobalConfig = {
-  slug: 'site-settings',
+  slug: 'siteSettings',
   access: {
     read: () => true,
   },

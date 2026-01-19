@@ -34,7 +34,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       <div className="container">
         <div className="py-8 flex justify-between">
           <Link href="/">
-            <Logo loading="eager" priority="high" className="" src={data.primaryNavigationLogo?.url} />
+            <Logo loading="eager" priority="high" className="" src={typeof data.primaryNavigationLogo === 'object' ? data.primaryNavigationLogo?.url || undefined : undefined} />
           </Link>
           <HeaderNav data={data} />
         </div>

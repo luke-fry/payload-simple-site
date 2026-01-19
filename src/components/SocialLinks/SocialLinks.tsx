@@ -2,10 +2,10 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import { CMSLink } from '@/components/Link'
 import React from 'react'
 
-import type { SiteSettings } from '@/payload-types'
+import type { SiteSetting } from '@/payload-types'
 
 export async function SocialLinks() {
-  const siteSettingsData: SiteSettings = await getCachedGlobal('site-settings', 1)()
+  const siteSettingsData = (await getCachedGlobal('siteSettings', 1)()) as SiteSetting
 
   const facebook = siteSettingsData?.facebook || null
   const twitter = siteSettingsData?.twitter || null

@@ -5,6 +5,7 @@ interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
+  src?: string
 }
 
 export const Logo = (props: Props) => {
